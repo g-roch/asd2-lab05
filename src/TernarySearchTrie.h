@@ -8,7 +8,7 @@
 #include <string>
 
 class TernarySearchTrie {
-
+private:
     //
     // Noeud de l'arbre. contient une cle, une valeur, et les liens vers les
     // sous-arbres droit et gauche.
@@ -20,7 +20,6 @@ class TernarySearchTrie {
         Node* right; // sous arbre avec des cles plus grandes
         Node* mid;   // sous arbres
         Node* left;  // sous arbre avec des cles plus petites
-
     };
 
     //
@@ -29,14 +28,14 @@ class TernarySearchTrie {
     Node* root;
 
 public:
+
+    TernarySearchTrie();
+
     /**
-     * Initialiser le root (pas sur)
+     * Insert un nouvel élément dans la structure
      * @param key
-     * @param val
      */
-    void insert(std::string key){
-        root = insert(root,key,0);
-    }
+    void insert(const std::string & key);
 
 private:
     /**
@@ -47,45 +46,20 @@ private:
      * @param d
      * @return Retourne le noeud x
      */
-    Node* insert(Node* x, std::string key, int d){
-        char c = key.at(d);
-        //Si le noeud est vide
-        if(x == nullptr) {
-            x = new Node(); x->c = c;
-        }
-
-        //Si le char du noeud > char paramètre
-        if(c < x->c)
-            x->left = insert(x->left, key, d);
-
-       //Si le char du noeud < char paramètre
-        else if(c > x->c)
-            x->right = insert(x->right, key, d);
-
-        //Si le char du noeud = char paramètre
-        else if(d < key.length() - 1)
-            x->mid = insert(x->mid, key, d+1);
-
-        else
-            x->exist = true;
-
-        return x;
-    }
+    Node * insert(Node* x, const std::string & key, int d);
 
 public:
-
-    int count(std::string key){
-        return count(root,key,0);
-    }
+    /**
+     * Compte le nombre de fois qu'un élément est présent dans la structure
+     * (cette fonction est la pour que la signature soit similaire à std::set, mais
+     * dans les faits elle ne fait que de tester si la valeur est présent ou non
+     * dans la structure.
+     * @param key Valeur recherchée
+     * @return 1 ou 0
+     */
+    int count(const std::string & key) const;
 private:
-    int count(Node* x, std::string key, int d){
-        if(x == nullptr) return 0;
-        char c = key.at(d);
-        if(c < x->c)                   return count(x->left, key, d);
-        else if(c > x->c)              return count(x->right, key, d);
-        else if(d < key.length() - 1) return count(x->mid, key, d+1);
-        else                          return x->exist;
-    }
+    int count(Node* x, const std::string &key, int d) const;
 };
 
 #endif //ASD2_LABO4_TERNARYSEARCHTRIE_H
