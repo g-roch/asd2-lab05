@@ -46,6 +46,15 @@ void loadText(const string & filename, F fn) {
     }
 }
 
+
+//pseudo code correction d'erreur
+//get position de l'erreur dans le mot
+    //test d'inverser la lettre à pos avec la lettre à pos+1, si rien n'est trouvé alors false
+    //test si insérer/modifier une possible lettre à la pos de l'erreur, sinon false
+    //test si supprimer lettre à pos de l'erreur marche, sinon false
+    //si rien ne marche alors on ne propose aucune correction au user
+//si qqchose marche, alors renvoyer la liste des solutions possibles au user
+
 int main(int argc, const char * argv[]) {
     set<string> dict;
 
