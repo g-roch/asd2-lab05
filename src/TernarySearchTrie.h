@@ -35,7 +35,7 @@ public:
      * @param key
      * @param val
      */
-    void put(std::string key){
+    void insert(std::string key){
         root = put(root,key,0);
     }
 
@@ -48,7 +48,7 @@ private:
      * @param d
      * @return Retourne le noeud x
      */
-    Node put(Node x, std::string key, int d){
+    Node insert(Node x, std::string key, int d){
         ValueType c = key.at(d);
         //Si le noeud est vide
         if(x == nullptr) {x = new Node(); x.c = c;}
