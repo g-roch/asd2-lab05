@@ -72,23 +72,18 @@ private:
     }
 
 public:
-    bool contains(std::string key){
-        return get(key) != nullptr;
-    }
 
-    ValueType get(std::string key){
-        Node x = get(root,key,0);
-        if(x == nullptr) return nullptr;
-        return x.val;
+    int count(std::string key){
+        return get(root,key,0);
     }
 private:
-    Node get(Node x, std::string key, int d){
-        if(x == nullptr) return nullptr;
+    int count(Node x, std::string key, int d){
+        if(x == nullptr) return 0;
         ValueType c = key.at(d);
-        if(c < x.c)                   return get(x.left, key, d);
-        else if(c > x.c)              return get(x.right, key, d);
-        else if(d < key.length() - 1) return get(x.mid, key, d+1);
-        else                          return x;
+        if(c < x.c)                   return count(x.left, key, d);
+        else if(c > x.c)              return count(x.right, key, d);
+        else if(d < key.length() - 1) return count(x.mid, key, d+1);
+        else                          return x.exist;
     }
 };
 
