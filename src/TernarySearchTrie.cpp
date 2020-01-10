@@ -1,3 +1,10 @@
+/**
+ * @file TernarySearchTrie.cpp
+ * Labo5
+ * @author Gabriel Roch
+ * @author Gwendoline Dossegger
+ * @author Jean-Luc Blanc
+ */
 
 #include "TernarySearchTrie.h"
 
