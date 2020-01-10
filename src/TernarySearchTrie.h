@@ -7,7 +7,7 @@
 
 #include <string>
 
-template <typename ValueType >
+template <typename ValueType>
 class TernarySearchTrie{
 
     //
@@ -16,8 +16,8 @@ class TernarySearchTrie{
     //
     struct Node {
     public:
-        ValueType val;
-        char c;
+        bool exist;
+        ValueType c;
         Node* right; // sous arbre avec des cles plus grandes
         Node* mid;   // sous arbres
         Node* left;  // sous arbre avec des cles plus petites
@@ -35,8 +35,8 @@ public:
      * @param key
      * @param val
      */
-    void put(std::string key, ValueType val){
-        root = put(root,key,val,0);
+    void put(std::string key){
+        root = put(root,key,0);
     }
 
 private:
@@ -48,25 +48,25 @@ private:
      * @param d
      * @return Retourne le noeud x
      */
-    Node put(Node x, std::string key, ValueType val, int d){
-        char c = key.at(d);
+    Node put(Node x, std::string key, int d){
+        ValueType c = key.at(d);
         //Si le noeud est vide
-        if(x == nullptr) {x == new Node(); x.c = c;}
+        if(x == nullptr) {x = new Node(); x.c = c;}
 
         //Si le char du noeud > char paramètre
         if(c < x.c)
-            x.left = put(x.left,key,val,d);
+            x.left = put(x.left, key, d);
 
        //Si le char du noeud < char paramètre
         else if(c > x.c)
-            x.right = put(x.right, key, val,d);
+            x.right = put(x.right, key, d);
 
         //Si le char du noeud = char paramètre
         else if(d < key.length() - 1)
-            x.mid = put(x.mid, key, val, d+1);
+            x.mid = put(x.mid, key, d+1);
 
         else
-            x.val = val;
+            x.val = true;
 
         return x;
     }
@@ -84,7 +84,7 @@ public:
 private:
     Node get(Node x, std::string key, int d){
         if(x == nullptr) return nullptr;
-        char c = key.at(d);
+        ValueType c = key.at(d);
         if(c < x.c)                   return get(x.left, key, d);
         else if(c > x.c)              return get(x.right, key, d);
         else if(d < key.length() - 1) return get(x.mid, key, d+1);
