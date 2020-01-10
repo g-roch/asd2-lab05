@@ -7,8 +7,7 @@
 
 #include <string>
 
-template <typename ValueType>
-class TernarySearchTrie{
+class TernarySearchTrie {
 
     //
     // Noeud de l'arbre. contient une cle, une valeur, et les liens vers les
@@ -17,7 +16,7 @@ class TernarySearchTrie{
     struct Node {
     public:
         bool exist;
-        ValueType c;
+        char c;
         Node* right; // sous arbre avec des cles plus grandes
         Node* mid;   // sous arbres
         Node* left;  // sous arbre avec des cles plus petites
@@ -36,7 +35,7 @@ public:
      * @param val
      */
     void insert(std::string key){
-        root = put(root,key,0);
+        root = insert(root,key,0);
     }
 
 private:
@@ -48,25 +47,27 @@ private:
      * @param d
      * @return Retourne le noeud x
      */
-    Node insert(Node x, std::string key, int d){
-        ValueType c = key.at(d);
+    Node* insert(Node* x, std::string key, int d){
+        char c = key.at(d);
         //Si le noeud est vide
-        if(x == nullptr) {x = new Node(); x.c = c;}
+        if(x == nullptr) {
+            x = new Node(); x->c = c;
+        }
 
         //Si le char du noeud > char paramètre
-        if(c < x.c)
-            x.left = put(x.left, key, d);
+        if(c < x->c)
+            x->left = insert(x->left, key, d);
 
        //Si le char du noeud < char paramètre
-        else if(c > x.c)
-            x.right = put(x.right, key, d);
+        else if(c > x->c)
+            x->right = insert(x->right, key, d);
 
         //Si le char du noeud = char paramètre
         else if(d < key.length() - 1)
-            x.mid = put(x.mid, key, d+1);
+            x->mid = insert(x->mid, key, d+1);
 
         else
-            x.val = true;
+            x->exist = true;
 
         return x;
     }
@@ -74,16 +75,16 @@ private:
 public:
 
     int count(std::string key){
-        return get(root,key,0);
+        return count(root,key,0);
     }
 private:
-    int count(Node x, std::string key, int d){
+    int count(Node* x, std::string key, int d){
         if(x == nullptr) return 0;
-        ValueType c = key.at(d);
-        if(c < x.c)                   return count(x.left, key, d);
-        else if(c > x.c)              return count(x.right, key, d);
-        else if(d < key.length() - 1) return count(x.mid, key, d+1);
-        else                          return x.exist;
+        char c = key.at(d);
+        if(c < x->c)                   return count(x->left, key, d);
+        else if(c > x->c)              return count(x->right, key, d);
+        else if(d < key.length() - 1) return count(x->mid, key, d+1);
+        else                          return x->exist;
     }
 };
 
