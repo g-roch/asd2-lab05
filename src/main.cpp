@@ -14,7 +14,7 @@
 #include "TernarySearchTrie.h"
 
 //définit si on utilise un TST ou une unordered_set
-#define TST false
+#define TST true
 
 using namespace std;
 
