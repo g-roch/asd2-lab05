@@ -8,13 +8,15 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <set>
+#include <unordered_set>
 #include "TernarySearchTrie.h"
 
+//définit si on utilise un TST ou une unordered_set
 #define TST true
 
 using namespace std;
 
+//
 const string LETTRE_ALLOWED("abcdefghijklmnopqrstuvwxyz'");
 
 /**
@@ -24,9 +26,9 @@ const string LETTRE_ALLOWED("abcdefghijklmnopqrstuvwxyz'");
  */
 void cleanWord(string & str) {
     string newstr;
-    for(size_t i = 0; i < str.size(); ++i) {
-        if(isalpha(str[i]) or str[i] == '\'')
-            newstr.push_back(tolower(str[i]));
+    for(char i : str) {
+        if(isalpha(i) or i == '\'')
+            newstr.push_back((char)(tolower(i)));
     }
     while(newstr.front() == '\'')
         newstr.erase(0, 1);
@@ -34,6 +36,12 @@ void cleanWord(string & str) {
         newstr.erase(newstr.size() - 1);
     swap(newstr, str);
 }
+/**
+ *
+ * @tparam T, type de conteneur
+ * @param filename, fichier contenant le dictionnaire
+ * @param dict, le dictionnaire
+ */
 template <typename T>
 void loadDictionnary(const string & filename, T & dict) {
     ifstream ifs(filename);
@@ -45,6 +53,12 @@ void loadDictionnary(const string & filename, T & dict) {
     }
 }
 
+/**
+ *
+ * @tparam F,
+ * @param filename, fichier contenant le texte
+ * @param fn, fonction à utiliser
+ */
 template <typename F>
 void loadText(const string & filename, F fn) {
     ifstream ifs(filename);
@@ -57,17 +71,28 @@ void loadText(const string & filename, F fn) {
     }
 }
 
+/**
+ * @brief affiche les corrections valides pour les mots faux
+ * @param noHypo
+ * @param strCopy
+ */
 void displayCorr(int noHypo, const string & strCopy)
 {
     cout << noHypo << ":" << strCopy << endl;
 }
 
+/**
+ * @brief test les 4 hypothèses de correction d'un mot
+ * @tparam T, type du conteneur
+ * @param str, mot à corriger
+ * @param dict, dictionnaire
+ */
 template <typename T>
 void hypoCorrWords(const string & str, T dict)
 {
     cout << '*' << str << endl;
     string strCopy;
-    for(int i = 0; i < str.size(); ++i)
+    for(unsigned i = 0; i < str.size(); ++i)
     {
         strCopy = str;
         strCopy.erase(i, 1);
@@ -76,7 +101,7 @@ void hypoCorrWords(const string & str, T dict)
             displayCorr(1, strCopy);
         }
     }
-    for(int i = 0; i <= str.size(); ++i) {
+    for(unsigned i = 0; i <= str.size(); ++i) {
         strCopy = str;
         strCopy.insert(i, "-"); // caractère remplacer dans la boucle
         for(char c : LETTRE_ALLOWED) {
@@ -87,7 +112,7 @@ void hypoCorrWords(const string & str, T dict)
         }
     }
 
-    for(int i = 0; i < str.size(); ++i)
+    for(unsigned i = 0; i < str.size(); ++i)
     {
         strCopy = str;
         for(char c : LETTRE_ALLOWED) {
@@ -97,7 +122,7 @@ void hypoCorrWords(const string & str, T dict)
         }
     }
     strCopy = str;
-    for(int i = 0; i < str.size()-1; ++i) {
+    for(unsigned i = 0; i < str.size()-1; ++i) {
         swap(strCopy[i], strCopy[i+1]);
         if(dict.count(strCopy))
             displayCorr(4, strCopy);
@@ -105,34 +130,37 @@ void hypoCorrWords(const string & str, T dict)
     }
 }
 
+/**
+ * @brief lance la correction des erreurs
+ * @tparam T, types de données dans le conteneur
+ * @param str, chaine de caractère à corriger
+ * @param dict, conteneur du dictionnaire
+ */
 template <typename T>
-bool corrError(const string & str, T dict)
+void corrError(const string & str, T dict)
 {
     hypoCorrWords(str, dict);
-
-    //pseudo code correction d'erreur
-        //test si supprimer lettre à pos de l'erreur marche, sinon false
-        //test si insérer/modifier une possible lettre à la pos de l'erreur, sinon false
-        //test d'inverser la lettre à pos avec la lettre à pos+1, si rien n'est trouvé alors false
-    //si qqchose marche, alors renvoyer la liste des solutions possibles au user
-    //si rien ne marche alors on ne propose aucune correction au user
-
 }
 
 
-int main(int argc, const char * argv[]) {
+int main() {
 #if TST
     TernarySearchTrie dict;
 #else
-    set<string> dict;
+    unordered_set<string> dict;
 #endif
 
     // Le Dictionnaire est en UTF-8 mais puisque l'on garde uniquement les
     // caractères a-z et apostrophe (') on peut le traiter comme un fichier
     // ASCII sans aucun problème (ces 27 caractères sont codés de la même manière
     // en UTF-8 et en ASCII).
-    loadDictionnary("data/dictionary.txt", dict);
 
+    //temps load dict début
+    loadDictionnary("data/dictionary.txt", dict);
+    //temps load dict fin
+
+
+    //temps corr txt début
     loadText(
             "data/input_wikipedia.txt",
             [& dict] (const string & str) {
@@ -143,8 +171,8 @@ int main(int argc, const char * argv[]) {
                 }
             }
             );
+    //temps corr txt fin
 
-    //cout << "dict size : " << dict.size() << endl;
 
 
 	return EXIT_SUCCESS;
