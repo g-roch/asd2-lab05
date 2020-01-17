@@ -171,7 +171,7 @@ int main() {
     //temps load dict fin
     end = chrono::system_clock::now();
 
-    int loadDictTime = (int) chrono::duration_cast<chrono::seconds> (end-start).count();
+    long long loadDictTime = chrono::duration_cast<chrono::seconds> (end-start).count();
 
     //temps corr txt début
     chrono::time_point<chrono::system_clock> startCorr, endCorr;
@@ -197,7 +197,7 @@ int main() {
     //temps corr txt fin
     endCorr = chrono::system_clock::now();
 
-    int corrTxtTime = (int) chrono::duration_cast<chrono::seconds> (endCorr-startCorr).count();
+    long long corrTxtTime = chrono::duration_cast<chrono::seconds> (endCorr-startCorr).count();
 
     cout << "temps load dict : " << loadDictTime << " seconde(s) " << endl;
     cout << "temps corr txt  : " << corrTxtTime  << " seconde(s) " << endl;
