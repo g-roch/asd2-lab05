@@ -94,6 +94,7 @@ void hypoCorrWords(const string & str, T dict, ofstream & result)
 {
     result << '*' << str << endl;
     string strCopy;
+    //hypothèse 1
     for(unsigned i = 0; i < str.size(); ++i)
     {
         strCopy = str;
@@ -103,6 +104,7 @@ void hypoCorrWords(const string & str, T dict, ofstream & result)
             displayCorr(1, strCopy, result);
         }
     }
+    //hypothèse 2
     for(unsigned i = 0; i <= str.size(); ++i) {
         strCopy = str;
         strCopy.insert(i, "-"); // caractère remplacer dans la boucle
@@ -114,6 +116,7 @@ void hypoCorrWords(const string & str, T dict, ofstream & result)
         }
     }
 
+    //hypothèse 3
     for(unsigned i = 0; i < str.size(); ++i)
     {
         strCopy = str;
@@ -123,6 +126,7 @@ void hypoCorrWords(const string & str, T dict, ofstream & result)
                 displayCorr(3, strCopy, result);
         }
     }
+    //hypothèse 4
     strCopy = str;
     for(unsigned i = 0; i < str.size()-1; ++i) {
         swap(strCopy[i], strCopy[i+1]);
@@ -167,7 +171,7 @@ int main() {
     //temps load dict fin
     end = chrono::system_clock::now();
 
-    int loadDictTime = chrono::duration_cast<chrono::seconds> (end-start).count();
+    int loadDictTime = (int) chrono::duration_cast<chrono::seconds> (end-start).count();
 
     //temps corr txt début
     chrono::time_point<chrono::system_clock> startCorr, endCorr;
@@ -193,7 +197,7 @@ int main() {
     //temps corr txt fin
     endCorr = chrono::system_clock::now();
 
-    int corrTxtTime = chrono::duration_cast<chrono::seconds> (endCorr-startCorr).count();
+    int corrTxtTime = (int) chrono::duration_cast<chrono::seconds> (endCorr-startCorr).count();
 
     cout << "temps load dict : " << loadDictTime << " seconde(s) " << endl;
     cout << "temps corr txt  : " << corrTxtTime  << " seconde(s) " << endl;
