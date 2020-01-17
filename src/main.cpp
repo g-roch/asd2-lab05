@@ -4,16 +4,19 @@
  * @author Gabriel Roch
  * @author Gwendoline Dossegger
  * @author Jean-Luc Blanc
+ *
+ * Nous avons choisis la structure "unordered_set"
+ * car elle possède un temps de recherche, insertion et suppression en O(1)
+ * Pour changer de structure entre unordered_set et TST il suffit de mettre la define TST à true ou false
  */
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <ctime>
 #include <chrono>
 #include <unordered_set>
 #include "TernarySearchTrie.h"
 
-//définit si on utilise un TST ou une unordered_set
+//définit si on utilise un TST ou une unordered_set, true = TST, false = unordered_set
 #define TST false
 
 using namespace std;
