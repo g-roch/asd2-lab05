@@ -8,11 +8,13 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <ctime>
+#include <chrono>
 #include <unordered_set>
 #include "TernarySearchTrie.h"
 
 //définit si on utilise un TST ou une unordered_set
-#define TST true
+#define TST false
 
 using namespace std;
 
@@ -76,9 +78,9 @@ void loadText(const string & filename, F fn) {
  * @param noHypo
  * @param strCopy
  */
-void displayCorr(int noHypo, const string & strCopy)
+void displayCorr(int noHypo, const string & strCopy, ofstream & result)
 {
-    cout << noHypo << ":" << strCopy << endl;
+    result << noHypo << ":" << strCopy << endl;
 }
 
 /**
@@ -88,9 +90,9 @@ void displayCorr(int noHypo, const string & strCopy)
  * @param dict, dictionnaire
  */
 template <typename T>
-void hypoCorrWords(const string & str, T dict)
+void hypoCorrWords(const string & str, T dict, ofstream & result)
 {
-    cout << '*' << str << endl;
+    result << '*' << str << endl;
     string strCopy;
     for(unsigned i = 0; i < str.size(); ++i)
     {
@@ -98,7 +100,7 @@ void hypoCorrWords(const string & str, T dict)
         strCopy.erase(i, 1);
         if(dict.count(strCopy))
         {
-            displayCorr(1, strCopy);
+            displayCorr(1, strCopy, result);
         }
     }
     for(unsigned i = 0; i <= str.size(); ++i) {
@@ -107,7 +109,7 @@ void hypoCorrWords(const string & str, T dict)
         for(char c : LETTRE_ALLOWED) {
             strCopy[i] = c;
             if(dict.count(strCopy))
-                displayCorr(2, strCopy);
+                displayCorr(2, strCopy, result);
 
         }
     }
@@ -118,14 +120,14 @@ void hypoCorrWords(const string & str, T dict)
         for(char c : LETTRE_ALLOWED) {
             strCopy[i] = c;
             if(dict.count(strCopy))
-                displayCorr(3, strCopy);
+                displayCorr(3, strCopy, result);
         }
     }
     strCopy = str;
     for(unsigned i = 0; i < str.size()-1; ++i) {
         swap(strCopy[i], strCopy[i+1]);
         if(dict.count(strCopy))
-            displayCorr(4, strCopy);
+            displayCorr(4, strCopy, result);
         swap(strCopy[i], strCopy[i+1]);
     }
 }
@@ -137,9 +139,9 @@ void hypoCorrWords(const string & str, T dict)
  * @param dict, conteneur du dictionnaire
  */
 template <typename T>
-void corrError(const string & str, T dict)
+void corrError(const string & str, T dict, ofstream & result)
 {
-    hypoCorrWords(str, dict);
+    hypoCorrWords(str, dict, result);
 }
 
 
@@ -156,23 +158,45 @@ int main() {
     // en UTF-8 et en ASCII).
 
     //temps load dict début
-    loadDictionnary("data/dictionary.txt", dict);
-    //temps load dict fin
+    chrono::time_point<chrono::system_clock> start, end;
+    start = chrono::system_clock::now();
 
+    loadDictionnary("data/dictionary.txt", dict);
+
+
+    //temps load dict fin
+    end = chrono::system_clock::now();
+
+    int loadDictTime = chrono::duration_cast<chrono::seconds> (end-start).count();
 
     //temps corr txt début
+    chrono::time_point<chrono::system_clock> startCorr, endCorr;
+    startCorr = chrono::system_clock::now();
+
+    ofstream result;
+    result.open("data/result.txt");
+
     loadText(
             "data/input_wikipedia.txt",
-            [& dict] (const string & str) {
+            [& dict, & result] (const string & str) {
                 /* traitement du mot (test s'il est dans le dictionnaire */
                 if(!dict.count(str))
                 {
-                    corrError(str, dict);
+                    corrError(str, dict, result);
                 }
             }
             );
-    //temps corr txt fin
 
+    result.close();
+
+
+    //temps corr txt fin
+    endCorr = chrono::system_clock::now();
+
+    int corrTxtTime = chrono::duration_cast<chrono::seconds> (endCorr-startCorr).count();
+
+    cout << "temps load dict : " << loadDictTime << " seconde(s) " << endl;
+    cout << "temps corr txt  : " << corrTxtTime  << " seconde(s) " << endl;
 
 
 	return EXIT_SUCCESS;
