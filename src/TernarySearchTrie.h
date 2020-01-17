@@ -24,6 +24,10 @@ private:
         Node* right; // sous arbre avec des cles plus grandes
         Node* mid;   // sous arbres
         Node* left;  // sous arbre avec des cles plus petites
+
+        int height; // hauteur de l'arbre
+
+        Node();
     };
 
     /**
@@ -45,13 +49,13 @@ public:
 
 private:
     /**
-     * Insertion d' un nouvel élément dans la structure
+     * Insertion position' un nouvel élément dans la structure
      * @param x Noeud où insérer l'élément
      * @param key Element a inséré (string)
-     * @param d Index du du string
+     * @param position Index du du string
      * @return Retourne le noeud x
      */
-    Node * insert(Node* x, const std::string & key, int d);
+    Node * insert(Node* x, const std::string & key, int position);
 
 public:
     /**
@@ -71,11 +75,20 @@ private:
      * dans les faits elle ne fait que de tester si la valeur est présent ou non
      * dans la structure.
      * @param x Noeud
-     * @param d index qui détermine la position dans le string
+     * @param position index qui détermine la position dans le string
      * @param key Valeur recherchée
      * @return 1 ou 0
      */
-    int count(Node* x, const std::string &key, int d) const;
+    int count(Node* x, const std::string &key, int position) const;
+
+private:
+    Node* rotateLeft(Node* x);
+    Node* rotateRight(Node* x);
+    int height(Node* x);
+    void updateNodeHeight(Node* x);
+    int balance(Node* x);
+    Node* restoreBalance(Node* x);
+
 };
 
 #endif //ASD2_LABO4_TERNARYSEARCHTRIE_H

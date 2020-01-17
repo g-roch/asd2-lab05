@@ -14,7 +14,7 @@
 #include "TernarySearchTrie.h"
 
 //définit si on utilise un TST ou une unordered_set
-#define TST false
+#define TST true
 
 using namespace std;
 
@@ -168,6 +168,7 @@ int main() {
     end = chrono::system_clock::now();
 
     int loadDictTime = chrono::duration_cast<chrono::seconds> (end-start).count();
+    cout << endl << "temps load dict : " << loadDictTime << " seconde(s) " << endl;
 
     //temps corr txt début
     chrono::time_point<chrono::system_clock> startCorr, endCorr;
@@ -183,6 +184,7 @@ int main() {
                 if(!dict.count(str))
                 {
                     corrError(str, dict, result);
+                    cout << '.';
                 }
             }
             );
@@ -195,7 +197,6 @@ int main() {
 
     int corrTxtTime = chrono::duration_cast<chrono::seconds> (endCorr-startCorr).count();
 
-    cout << "temps load dict : " << loadDictTime << " seconde(s) " << endl;
     cout << "temps corr txt  : " << corrTxtTime  << " seconde(s) " << endl;
 
 
