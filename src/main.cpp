@@ -17,7 +17,7 @@
 #include "TernarySearchTrie.h"
 
 //définit si on utilise un TST ou une unordered_set, true = TST, false = unordered_set
-#define TST false
+#define TST true
 
 using namespace std;
 
@@ -184,7 +184,7 @@ int main() {
     result.open("data/result.txt");
 
     loadText(
-            "data/input_wikipedia.txt",
+            "data/input_sh.txt",
             [& dict, & result] (const string & str) {
                 /* traitement du mot (test s'il est dans le dictionnaire */
                 if(!dict.count(str))
