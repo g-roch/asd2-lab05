@@ -24,12 +24,25 @@ private:
         Node* right; // sous arbre avec des cles plus grandes
         Node* mid;   // sous arbres
         Node* left;  // sous arbre avec des cles plus petites
+        int nodeHeight; // hauteur
+
+        Node(char c);
     };
 
     /**
      * Noeud racine
      */
     Node* root;
+
+private:
+    void updateNodeHeight(Node* x);
+    Node* rotateRight(Node* x);
+    Node* rotateLeft(Node* x);
+
+    int balance(Node* x);
+    Node* restoreBalance(Node* x);
+
+    int height(Node* x);
 
 public:
     /**
